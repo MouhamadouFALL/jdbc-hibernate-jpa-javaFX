@@ -13,7 +13,13 @@ public class DBConnect {
         try {
             BasicDataSource dataSource = new BasicDataSource();
 
-            
+            dataSource.setUrl("jdbc:mysql://localhost:3306/tennis?useSSl=false");
+            dataSource.setUsername("root");
+            dataSource.setPassword("");
+
+            conn = dataSource.getConnection();
+
+
             //----------------------------------------------------------------------------------------------------------------------------------------------------------------
             // MySQL driver MySQL Connector
             // ouvrir une connexion avec DriverManager
@@ -21,18 +27,17 @@ public class DBConnect {
             //conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/tennis?useSSL=false","root","");
 
             // Ouvrir la connection avec Interface DataSource
-            MysqlDataSource dataSource = new MysqlDataSource();
-
-            // definir les params de connexion
-            dataSource.setURL("jdbc:mysql://localhost:3306/tennis?useSSl=false");
+            // MysqlDataSource dataSource = new MysqlDataSource();
+            // Définir les params de connexion
+            //dataSource.setURL("jdbc:mysql://localhost:3306/tennis?useSSl=false");
             //dataSource.setServerName("localhost");
             //dataSource.setPort(3306);
             //dataSource.setDatabaseName("tennis");
             //dataSource.setUseSSL(false);
-            dataSource.setUser("root");
-            dataSource.setPassword("");
+            //dataSource.setUser("root");
+            //dataSource.setPassword("");
 
-            conn = dataSource.getConnection();
+            //conn = dataSource.getConnection();
 
             // Désactiver la validaton automatique des transactions
             conn.setAutoCommit(false);
