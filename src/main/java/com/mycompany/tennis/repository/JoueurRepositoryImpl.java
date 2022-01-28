@@ -5,10 +5,7 @@ import com.mycompany.tennis.entity.Joueur;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +13,7 @@ public class JoueurRepositoryImpl {
 
     // Définir le opérations du CRUD
 
-    private void createPlayer(Joueur joueur) {
+    public void createPlayer(Joueur joueur) {
 
         Connection conn = null;
 
@@ -26,15 +23,23 @@ public class JoueurRepositoryImpl {
 
             conn = dataSource.getConnection();
 
-            PreparedStatement preparedStatementInsert = conn.prepareStatement("insert into joueur(nom, prenom, sexe) values(?, ?, ?)");
+            PreparedStatement preparedStatementInsert = conn.prepareStatement("insert into joueur(nom, prenom, sexe) values(?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             preparedStatementInsert.setString(1, joueur.getNom());
             preparedStatementInsert.setString(2, joueur.getPrenom());
             preparedStatementInsert.setString(3, joueur.getSexe().toString());
 
             // inserer dans la base de donnees
             preparedStatementInsert.executeUpdate();
+            // Recupérer les id autogenerés
+            ResultSet rs = preparedStatementInsert.getGeneratedKeys();
 
-            System.out.println("Joueur bien enregistrer");
+            Long ident = null;
+            if (rs.next()) {
+                joueur.setId(rs.getLong(1));
+                ident = joueur.getId();
+            }
+
+            System.out.println("Joueur "+ident+" a été bien enregistré.");
 
         }
         catch (SQLException e) {
@@ -54,10 +59,11 @@ public class JoueurRepositoryImpl {
                 e.printStackTrace();
             }
         }
+
     }
 
 
-    private void updatePlayer(Joueur joueur) {
+    public void updatePlayer(Joueur joueur) {
 
         Connection conn = null;
 
@@ -99,7 +105,7 @@ public class JoueurRepositoryImpl {
     }
 
 
-    private void deletePlayer(long id) {
+    public void deletePlayer(long id) {
 
         Connection conn = null;
 
@@ -139,7 +145,7 @@ public class JoueurRepositoryImpl {
     }
 
 
-    private Joueur getPlayerById(long id) {
+    public Joueur getPlayerById(long id) {
 
         Connection conn = null;
 
