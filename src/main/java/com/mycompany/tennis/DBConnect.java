@@ -2,29 +2,22 @@ package com.mycompany.tennis;
 
 import com.mycompany.tennis.entity.Joueur;
 import com.mycompany.tennis.repository.JoueurRepositoryImpl;
-import com.mysql.cj.jdbc.MysqlDataSource;
-import org.apache.commons.dbcp2.BasicDataSource;
+import com.mycompany.tennis.service.JoueurService;
 
-import java.sql.*;
 import java.util.List;
 
 public class DBConnect {
 
     public static void main(String[] args) {
-        JoueurRepositoryImpl joueurRepository = new JoueurRepositoryImpl();
+        JoueurService joueurService = new JoueurService();
 
-        List<Joueur> joueurs = joueurRepository.allPlayers();
 
-        for (Joueur j : joueurs ) {
-            System.out.println(j.getPrenom()+"  "+j.getNom());
-        }
+        Joueur momo = new Joueur();
+        momo.setSexe('M');
+        momo.setNom("NDour");
+        momo.setPrenom("Modou");
 
-        Joueur bouh = new Joueur();
-        bouh.setSexe('M');
-        bouh.setNom("Diallo");
-        bouh.setPrenom("Bouh");
-
-        joueurRepository.createPlayer(bouh);
+        joueurService.createPlayer(momo);
     }
 
 }

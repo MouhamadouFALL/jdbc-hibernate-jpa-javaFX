@@ -2,7 +2,6 @@ package com.mycompany.tennis.repository;
 
 import com.mycompany.tennis.DataSourceProvider;
 import com.mycompany.tennis.entity.Joueur;
-import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -13,7 +12,7 @@ public class JoueurRepositoryImpl {
 
     // Définir le opérations du CRUD
 
-    public void createPlayer(Joueur joueur) {
+    public void create(Joueur joueur) {
 
         Connection conn = null;
 
@@ -63,7 +62,7 @@ public class JoueurRepositoryImpl {
     }
 
 
-    public void updatePlayer(Joueur joueur) {
+    public void update(Joueur joueur) {
 
         Connection conn = null;
 
@@ -105,7 +104,7 @@ public class JoueurRepositoryImpl {
     }
 
 
-    public void deletePlayer(long id) {
+    public void delete(long id) {
 
         Connection conn = null;
 
@@ -145,7 +144,7 @@ public class JoueurRepositoryImpl {
     }
 
 
-    public Joueur getPlayerById(long id) {
+    public Joueur getById(long id) {
 
         Connection conn = null;
 
@@ -192,7 +191,7 @@ public class JoueurRepositoryImpl {
         return joueur;
     }
 
-    public List<Joueur> allPlayers() {
+    public List<Joueur> all() {
 
         Connection conn = null;
         List<Joueur> joueurs = new ArrayList<>();
