@@ -1,25 +1,22 @@
 package com.mycompany.tennis.service;
 
-import com.mycompany.tennis.dao.MatchDaoImpl;
 import com.mycompany.tennis.entity.Match;
 import com.mycompany.tennis.repository.MatchRepositoryImpl;
 import com.mycompany.tennis.repository.ScoreRepositoryImpl;
 
 public class MatchService {
 
-    /*private MatchRepositoryImpl matchRepository;
-    private ScoreRepositoryImpl scoreRepository;*/
-    private MatchDaoImpl matchDao;
+    private MatchRepositoryImpl matchRepository;
+    private ScoreRepositoryImpl scoreRepository;
 
     public MatchService () {
-        /*this.matchRepository = new MatchRepositoryImpl();
-        this.scoreRepository = new ScoreRepositoryImpl();*/
-        matchDao = new MatchDaoImpl();
+        this.matchRepository = new MatchRepositoryImpl();
+        this.scoreRepository = new ScoreRepositoryImpl();
     }
 
     public void saveNewMatch(Match match) {
-        matchDao.createMatchwithscore(match);
-        /*matchRepository.create(match);
-        scoreRepository.create(match.getScore());*/
+
+        matchRepository.create(match);
+        scoreRepository.create(match.getScore());
     }
 }
