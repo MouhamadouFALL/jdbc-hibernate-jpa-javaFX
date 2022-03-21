@@ -1,7 +1,9 @@
 package com.mycompany.tennis.repository;
 
 import com.mycompany.tennis.DataSourceProvider;
+import com.mycompany.tennis.HibernateUtil;
 import com.mycompany.tennis.entity.Joueur;
+import org.hibernate.Session;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -146,46 +148,21 @@ public class JoueurRepositoryImpl {
 
     public Joueur getById(long id) {
 
-        Connection conn = null;
-
         Joueur joueur = null;
+        Session session = null;
 
         try{
 
-            DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
+            session = HibernateUtil.getSessionFactory().openSession();
+            joueur = session.get(Joueur.class, id);
 
-            conn = dataSource.getConnection();
-
-            PreparedStatement preparedStatementGet = conn.prepareStatement("select nom, prenom, sexe from joueur where id=?");
-            preparedStatementGet.setLong(1, id);
-
-            // obtenir un player
-            ResultSet rs = preparedStatementGet.executeQuery();
-
-            if (rs.next()) {
-                joueur = new Joueur();
-                joueur.setNom(rs.getString("NOM"));
-                joueur.setPrenom(rs.getString("PRENOM"));
-                joueur.setSexe(rs.getString("SEXE").charAt(0));
-            }
-
+            System.out.println("joueur lu");
         }
-        catch (SQLException e) {
-            e.printStackTrace();
-            try {
-                if (conn != null) {
-                    conn.rollback();
-                }
-            }catch (SQLException ex) {
-                ex.printStackTrace();
-            }
+        catch (Throwable t) {
+            t.printStackTrace();
         }
         finally {
-            try {
-                if (conn != null) conn.close();
-            }catch (SQLException e) {
-                e.printStackTrace();
-            }
+            if (session != null) session.close();
         }
 
         return joueur;

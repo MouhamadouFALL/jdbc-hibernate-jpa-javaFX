@@ -3,8 +3,10 @@ package com.mycompany.tennis.entity;
 public class Epreuve {
 
     private Long id;
+
     private short annee;
     private Character typeEpreuve;
+
     private Tournoi tournoi;
 
     public Long getId() {

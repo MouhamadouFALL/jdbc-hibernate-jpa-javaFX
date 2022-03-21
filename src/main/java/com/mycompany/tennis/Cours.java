@@ -13,6 +13,8 @@ import java.util.List;
 public class Cours {
 
     public static void main(String[] args) {
+
+
         MatchService matchService = new MatchService();
 
         Match match = new Match();
@@ -40,6 +42,7 @@ public class Cours {
         matchService.saveNewMatch(match);
 
         System.out.println("l'identifiant du match cré est : " + match.getId());
+
     }
 
 }

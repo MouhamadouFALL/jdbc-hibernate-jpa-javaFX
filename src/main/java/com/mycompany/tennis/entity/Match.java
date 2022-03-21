@@ -3,6 +3,7 @@ package com.mycompany.tennis.entity;
 public class Match {
 
     private Long id;
+    
     private Joueur vainqueur;
     private Joueur finaliste;
     private Epreuve epreuve;
