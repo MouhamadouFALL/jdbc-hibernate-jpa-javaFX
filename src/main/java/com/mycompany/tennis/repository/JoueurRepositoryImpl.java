@@ -4,6 +4,7 @@ import com.mycompany.tennis.DataSourceProvider;
 import com.mycompany.tennis.HibernateUtil;
 import com.mycompany.tennis.entity.Joueur;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -12,53 +13,35 @@ import java.util.List;
 
 public class JoueurRepositoryImpl {
 
-    // Définir le opérations du CRUD
+    public void rename(Long id, String newName){
 
+
+    }
+
+    // Définir le opérations du CRUD
     public void create(Joueur joueur) {
 
-        Connection conn = null;
+        Session session = null;
+        Transaction tx;
 
         try{
 
-            DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
+            session = HibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
 
-            conn = dataSource.getConnection();
+            session.persist(joueur); // met l'objet dans la session
+            //session.flush(); // déclenche automatiquement la requête INSERT et permet de synchroniser L'état la session et la base de données, mais non recommandé
 
-            PreparedStatement preparedStatementInsert = conn.prepareStatement("insert into joueur(nom, prenom, sexe) values(?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            preparedStatementInsert.setString(1, joueur.getNom());
-            preparedStatementInsert.setString(2, joueur.getPrenom());
-            preparedStatementInsert.setString(3, joueur.getSexe().toString());
+            tx.commit();
 
-            // inserer dans la base de donnees
-            preparedStatementInsert.executeUpdate();
-            // Recupérer les id autogenerés
-            ResultSet rs = preparedStatementInsert.getGeneratedKeys();
-
-            Long ident = null;
-            if (rs.next()) {
-                joueur.setId(rs.getLong(1));
-                ident = joueur.getId();
-            }
-
-            System.out.println("Joueur "+ident+" a été bien enregistré.");
+            System.out.println("Joueur bien enregistré.");
 
         }
-        catch (SQLException e) {
-            e.printStackTrace();
-            try {
-                if (conn != null) {
-                    conn.rollback();
-                }
-            }catch (SQLException ex) {
-                ex.printStackTrace();
-            }
+        catch (Throwable t) {
+            t.printStackTrace();
         }
         finally {
-            try {
-                if (conn != null) conn.close();
-            }catch (SQLException e) {
-                e.printStackTrace();
-            }
+            if (session != null) session.close();
         }
 
     }
@@ -108,41 +91,14 @@ public class JoueurRepositoryImpl {
 
     public void delete(long id) {
 
-        Connection conn = null;
+        Joueur joueur = getById(id);
 
-        try{
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
-            DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
+        session.delete(joueur);
 
-            conn = dataSource.getConnection();
+        System.out.println("Joueur bien supprimé");
 
-            PreparedStatement preparedStatementDelete = conn.prepareStatement("delete from joueur where id=?");
-            preparedStatementDelete.setLong(1, id);
-
-
-            // inserer dans la base de donnees
-            preparedStatementDelete.executeUpdate();
-
-            System.out.println("Joueur supprimé");
-
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            try {
-                if (conn != null) {
-                    conn.rollback();
-                }
-            }catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        }
-        finally {
-            try {
-                if (conn != null) conn.close();
-            }catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
 
@@ -151,19 +107,11 @@ public class JoueurRepositoryImpl {
         Joueur joueur = null;
         Session session = null;
 
-        try{
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        joueur = session.get(Joueur.class, id);
 
-            session = HibernateUtil.getSessionFactory().openSession();
-            joueur = session.get(Joueur.class, id);
+        System.out.println("joueur lu");
 
-            System.out.println("joueur lu");
-        }
-        catch (Throwable t) {
-            t.printStackTrace();
-        }
-        finally {
-            if (session != null) session.close();
-        }
 
         return joueur;
     }
@@ -213,6 +161,5 @@ public class JoueurRepositoryImpl {
 
         return joueurs;
     }
-
 
 }

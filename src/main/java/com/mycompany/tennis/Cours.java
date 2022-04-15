@@ -4,11 +4,7 @@ import com.mycompany.tennis.entity.Epreuve;
 import com.mycompany.tennis.entity.Joueur;
 import com.mycompany.tennis.entity.Match;
 import com.mycompany.tennis.entity.Score;
-import com.mycompany.tennis.repository.JoueurRepositoryImpl;
-import com.mycompany.tennis.service.JoueurService;
 import com.mycompany.tennis.service.MatchService;
-
-import java.util.List;
 
 public class Cours {
 
