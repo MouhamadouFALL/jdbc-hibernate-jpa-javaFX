@@ -1,12 +1,21 @@
 package com.mycompany.tennis.entity;
 
+import javax.persistence.*;
+
+@Entity
 public class Epreuve {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private short annee;
+
+    @Column(name = "type_epreuve")
     private Character typeEpreuve;
 
+    @ManyToOne
+    @JoinColumn(name = "id_tournoi")
     private Tournoi tournoi;
 
     public Long getId() {
