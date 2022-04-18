@@ -14,7 +14,8 @@ public class Epreuve {
     @Column(name = "type_epreuve")
     private Character typeEpreuve;
 
-    @ManyToOne
+    //@ManyToOne(fetch = FetchType.EAGER) // valeur par defaut pour les relations ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tournoi")
     private Tournoi tournoi;
 

@@ -31,6 +31,9 @@ public class EpreuveService {
 
             epreuve = epreuveRepository.getById(id);
 
+            System.out.println("Classe de la propriété name : " + epreuve.getTournoi().getClass().getName() + " .");
+            System.out.println("Epreuve  : id = " + epreuve.getId() + " | annee = " + epreuve.getAnnee() + " | tournoi : " + epreuve.getTournoi().getNom());
+
             tx.commit();
 
         }

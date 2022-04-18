@@ -16,7 +16,6 @@ public class EpreuveRepositoryImpl {
 
         Epreuve epreuve = session.get(Epreuve.class, id);
 
-        System.out.println("Epreuve lu : ");
 
         return epreuve;
     }
