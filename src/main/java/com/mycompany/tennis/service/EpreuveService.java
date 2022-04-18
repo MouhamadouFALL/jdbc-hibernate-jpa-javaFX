@@ -2,9 +2,11 @@ package com.mycompany.tennis.service;
 
 import com.mycompany.tennis.HibernateUtil;
 
+import com.mycompany.tennis.dto.EpreuveDto;
 import com.mycompany.tennis.entity.Epreuve;
 import com.mycompany.tennis.repository.EpreuveRepositoryImpl;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -18,23 +20,30 @@ public class EpreuveService {
     }
 
 
-    public Epreuve getEpreuve(Long id) {
+    public Epreuve getEpreuveAvecTournoi(Long id) {
 
         Epreuve epreuve = null;
         Session session = null;
         Transaction tx = null;
 
-        try {
+        EpreuveDto dto = null;
 
+        try {
             session = HibernateUtil.getSessionFactory().getCurrentSession();
             tx = session.beginTransaction();
 
             epreuve = epreuveRepository.getById(id);
 
-            System.out.println("Classe de la propriété name : " + epreuve.getTournoi().getClass().getName() + " .");
-            System.out.println("Epreuve  : id = " + epreuve.getId() + " | annee = " + epreuve.getAnnee() + " | tournoi : " + epreuve.getTournoi().getNom());
+            Hibernate.initialize(epreuve.getTournoi()); // Initialiser l'objet Proxy
 
             tx.commit();
+
+            dto = new EpreuveDto();
+
+            dto.setId(epreuve.getId());
+            dto.setAnnee(epreuve.getAnnee());
+            dto.setTypeEpreuve(epreuve.getTypeEpreuve());
+            dto.setTournoi(epreuve.getTournoi());
 
         }
         catch (Exception e) {
@@ -48,7 +57,42 @@ public class EpreuveService {
             }
         }
 
-        return epreuve;
+        return dto;
+    }
+
+
+    public Epreuve getEpreuveSansTournoi(Long id) {
+
+        Epreuve epreuve = null;
+        EpreuveDto dto = null;
+        Session session = null;
+        Transaction tx = null;
+
+        try {
+            session = HibernateUtil.getSessionFactory().getCurrentSession();
+            tx = session.beginTransaction();
+            epreuve = epreuveRepository.getById(id);
+            tx.commit();
+
+            dto = new EpreuveDto();
+
+            dto.setId(epreuve.getId());
+            dto.setAnnee(epreuve.getAnnee());
+            dto.setTypeEpreuve(epreuve.getTypeEpreuve());
+
+        }
+        catch (Exception e) {
+            if (tx != null)
+                tx.rollback();
+            e.printStackTrace();
+        }
+        finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+
+        return dto;
     }
 
 }
