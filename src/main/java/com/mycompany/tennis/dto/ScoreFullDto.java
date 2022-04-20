@@ -1,35 +1,23 @@
-package com.mycompany.tennis.entity;
+package com.mycompany.tennis.dto;
 
-import javax.persistence.*;
+public class ScoreFullDto {
 
-@Entity
-@Table(name = "score_vainqueur")
-public class Score {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "set_1")
     private Byte set1;
-    @Column(name = "set_2")
     private Byte set2;
-    @Column(name = "set_3")
     private Byte set3;
-    @Column(name = "set_4")
     private Byte set4;
-    @Column(name = "set_5")
     private Byte set5;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_match")
-    private Match match;
+    private MatchDto matchDto;
 
-    public Match getMatch() {
-        return match;
+    public MatchDto getMatchDto() {
+        return matchDto;
     }
 
-    public void setMatch(Match match) {
-        this.match = match;
+    public void setMatchDto(MatchDto matchDto) {
+        this.matchDto = matchDto;
     }
 
     public Long getId() {

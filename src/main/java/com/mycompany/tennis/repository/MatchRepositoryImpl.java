@@ -1,7 +1,9 @@
 package com.mycompany.tennis.repository;
 
 import com.mycompany.tennis.DataSourceProvider;
+import com.mycompany.tennis.HibernateUtil;
 import com.mycompany.tennis.entity.Match;
+import org.hibernate.Session;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -57,6 +59,16 @@ public class MatchRepositoryImpl {
             }
         }
 
+    }
+
+
+    public Match getById(Long id) {
+
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+
+        Match match = session.get(Match.class, id);
+
+        return match;
     }
 
 

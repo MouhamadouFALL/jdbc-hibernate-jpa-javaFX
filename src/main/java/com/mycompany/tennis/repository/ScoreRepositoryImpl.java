@@ -1,8 +1,10 @@
 package com.mycompany.tennis.repository;
 
 import com.mycompany.tennis.DataSourceProvider;
+import com.mycompany.tennis.HibernateUtil;
 import com.mycompany.tennis.entity.Match;
 import com.mycompany.tennis.entity.Score;
+import org.hibernate.Session;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -87,6 +89,15 @@ public class ScoreRepositoryImpl {
             }
         }
 
+    }
+
+    public Score getById(Long id) {
+
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+
+        Score score = session.get(Score.class, id);
+
+        return score;
     }
 
 

@@ -36,6 +36,8 @@
         <mapping class="com.mycompany.tennis.entity.Joueur" />
         <mapping class="com.mycompany.tennis.entity.Epreuve" />
 		<mapping class="com.mycompany.tennis.entity.Tournoi" />
+        <mapping class="com.mycompany.tennis.entity.Match" />
+        <mapping class="com.mycompany.tennis.entity.Score" />
 
     </session-factory>
 
