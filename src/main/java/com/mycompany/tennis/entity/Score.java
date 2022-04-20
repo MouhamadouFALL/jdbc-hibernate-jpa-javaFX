@@ -20,7 +20,7 @@ public class Score {
     @Column(name = "set_5")
     private Byte set5;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id_match")
     private Match match;
 
