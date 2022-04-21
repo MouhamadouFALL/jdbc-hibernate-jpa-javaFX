@@ -1,10 +1,15 @@
 package com.mycompany.tennis.entity;
 
+
+import org.hibernate.annotations.NamedQuery;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+
+@NamedQuery(query = "select j from Joueur j where j.sexe=?0", name = "given_sexe")
 @Entity
 public class Joueur {
 
