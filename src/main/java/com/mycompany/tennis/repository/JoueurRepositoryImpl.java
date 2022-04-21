@@ -5,10 +5,10 @@ import com.mycompany.tennis.HibernateUtil;
 import com.mycompany.tennis.entity.Joueur;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class JoueurRepositoryImpl {
@@ -113,48 +113,12 @@ public class JoueurRepositoryImpl {
         return joueur;
     }
 
-    public List<Joueur> all() {
+    public List<Joueur> liste() {
 
-        Connection conn = null;
-        List<Joueur> joueurs = new ArrayList<>();
-
-        try {
-            DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
-
-            conn = dataSource.getConnection();
-
-            PreparedStatement preparedStatement = conn.prepareStatement("select id, nom, prenom, sexe from joueur");
-
-            ResultSet rs = preparedStatement.executeQuery();
-
-            while (rs.next()) {
-
-                Joueur joueur = new Joueur();
-                joueur.setId(rs.getLong("ID"));
-                joueur.setNom(rs.getString("NOM"));
-                joueur.setPrenom(rs.getString("PRENOM"));
-                joueur.setSexe(rs.getString("Sexe").charAt(0));
-                // Ajouter le joueur dans la collection
-                joueurs.add(joueur);
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            try {
-                if (conn != null) conn.rollback();
-            }
-            catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-        }
-        finally {
-            try {
-                if (conn != null) conn.close();
-            }
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Query<Joueur> query = session.createQuery("select j from Joueur j", Joueur.class);
+        List<Joueur> joueurs = query.getResultList();
+        System.out.println("Joueurs lus :");
 
         return joueurs;
     }
