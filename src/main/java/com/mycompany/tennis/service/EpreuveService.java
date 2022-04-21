@@ -14,7 +14,9 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class EpreuveService {
 
@@ -119,6 +121,49 @@ public class EpreuveService {
         }
 
         return dto;
+    }
+
+    public List<EpreuveFullDto> getListeEpreuves(String codeTournoi) {
+
+        Session session = null;
+        List<EpreuveFullDto> epreuveFullDtos = new ArrayList<>();
+
+        try {
+            session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+
+            List<Epreuve> epreuves = epreuveRepository.liste(codeTournoi);
+
+            for (Epreuve epreuve : epreuves) {
+                final EpreuveFullDto epreuveFullDto = new EpreuveFullDto();
+
+                epreuveFullDto.setId(epreuve.getId());
+                epreuveFullDto.setAnnee(epreuve.getAnnee());
+                epreuveFullDto.setTypeEpreuve(epreuve.getTypeEpreuve());
+
+                TournoiDto tournoiDto = new TournoiDto();
+                tournoiDto.setId(epreuve.getTournoi().getId());
+                tournoiDto.setNom(epreuve.getTournoi().getNom());
+                tournoiDto.setCode(epreuve.getTournoi().getCode());
+                epreuveFullDto.setTournoi(tournoiDto);
+
+                epreuveFullDto.setParticipants(new HashSet<>());
+
+                epreuveFullDtos.add(epreuveFullDto);
+            }
+
+            session.getTransaction().commit();
+        }
+        catch (Exception e) {
+            if ( session.getTransaction() != null )
+                session.getTransaction().rollback();
+        }
+        finally {
+            if (session != null)
+                session.close();
+        }
+
+        return epreuveFullDtos;
     }
 
 }
